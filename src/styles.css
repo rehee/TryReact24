@@ -1,0 +1,22 @@
+.stage{
+  width: 300px;
+  height: 600px;
+  position: relative;
+  border: 1px solid black;
+}
+.actor{
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  margin-left: -15px;
+  margin-top: -15px;
+  background-color: red;
+}
+.enemy{
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  margin-left: -15px;
+  margin-top: -15px;
+  background-color: rgb(92, 4, 207);
+}
