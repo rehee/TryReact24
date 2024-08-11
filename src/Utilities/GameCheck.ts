@@ -24,16 +24,21 @@ class GameCheck {
         return degree * (Math.PI/180);
     }
 
-    public static Movement(posiiton: IPosition, speed: number, degree: number): IPosition {
-        console.log(1);
+    public static Movement(posiiton: IPosition, speed: number, degree: number, callback?: (p: IPosition) => void): IPosition {
+        
         const radians = this.degreeToRadians(degree);
+        
         const xInc = speed * Math.cos(radians);
         const yInc = speed * Math.sin(radians);
-        return {
+        const result = {
             X: posiiton.X + xInc,
             Y: posiiton.Y + yInc
         } as IPosition;
 
+        if(callback!=null){
+            callback(result)
+        }
+        return result;
         
     }
 }

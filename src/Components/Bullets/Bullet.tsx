@@ -9,7 +9,6 @@ export default function Bullet({ X, Y }: IBullet) {
                 top: Y
             }}
             >
-                {X}
             </div>
 
         </>

@@ -5,30 +5,35 @@ import  Enemy01  from "./Components/Actors/Enemy01";
 import { GameCheck } from "./Utilities/GameCheck";
 import Bullet from "./Components/Bullets/Bullet";
 import { IPosition } from "./Modals/IPosition";
+import { BulletDTO } from "./Modals/BulletDTO";
 export default function Game(){
   const actorRef = useRef(null);
-  const [gameStatus, setGameStatus] = useState({ X: 0, Y: 0, isPlaying: false, lastRender: -1 });
+  const bullets: BulletDTO[] = [];
+  const [gameStatus, setGameStatus] = useState({ X: 100, Y: 100, isPlaying: false, lastRender: -1,Bullets:bullets,Angle:0,id:0 });
   const [positionx, setPositionx] = useState(0);
   const [positiony, setPositiony] = useState(100);
   const [actor, setActor] = useState(<Actor Id="actor1" Ref={actorRef} />);
   const [enemy, setEnemy] = useState( <Enemy01 Id="enemy1" />);
-  const [bullet, setBullet] = useState(<Bullet X={positionx} Y={positiony} />);
+  const [bullet, setBullet] = useState<any[]>();
   function test(){
     console.log(actorRef);
     GameCheck.CheckDiv(actorRef.current,(a)=>console.log(a));
     console.log(actor);
   }
   
-
   function start(){
     gameStatus.isPlaying=true;
-    gameStatus.X = 0;
-    console.log(gameStatus.isPlaying);
+    for(let i =0;i<360;i++){
+      gameStatus.Bullets.push(new BulletDTO(gameStatus.id,{ X: 100, Y: 100, }, gameStatus.Angle, 60));
+      gameStatus.Angle++;
+      gameStatus.id++;
+    }
+    
   }
   function stop(){
     
     gameStatus.isPlaying=false;
-    console.log(gameStatus.isPlaying);
+   
   }
 
 
@@ -41,12 +46,13 @@ export default function Game(){
       renderTime=timestamp-gameStatus.lastRender;
       gameStatus.lastRender = timestamp;
     }
+    gameStatus.Bullets = gameStatus.Bullets.filter(b => b.Distance < 700 && b.PlayTime < 5000);
+    const bullets = gameStatus.Bullets.map(b=>b);
+    bullets.forEach(b => {
+      b.NextPosition(renderTime);
+    });
+    setBullet(bullets.map(b => <Bullet key={b.Id} X={b.Position.X} Y={b.Position.Y} />));
     
-    let speed = 30;
-    let speedPerRend = speed/renderTime;
-    setPositionx(gameStatus.X = gameStatus.X + speedPerRend);
-
-    setBullet(<Bullet X={gameStatus.X} Y={100} />);
   }
   
   const requestId  = useRef<any>();
